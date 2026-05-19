@@ -79,7 +79,33 @@ const toggleFaq = (i: number) => {
   activeIndex.value = activeIndex.value === i ? null : i;
 };
 
+const waitlistEmail = ref('');
+const waitlistLoading = ref(false);
+const waitlistStatus = ref<'idle' | 'success' | 'error'>('idle');
+
+const submitWaitlist = async () => {
+  if (!waitlistEmail.value) return;
+  waitlistLoading.value = true;
+  waitlistStatus.value = 'idle';
+  try {
+    const res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: waitlistEmail.value }),
+    });
+    waitlistStatus.value = res.ok ? 'success' : 'error';
+  } catch {
+    waitlistStatus.value = 'error';
+  } finally {
+    waitlistLoading.value = false;
+  }
+};
+
 const mobileMenuOpen = ref(false);
+
+const scrollToWaitlist = () => {
+  document.getElementById('waitlist-input')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+};
 
 const socials = [
   { icon: "mdi:facebook", label: "Facebook" },
@@ -109,17 +135,14 @@ const socials = [
               v-for="(item, index) in menuItems"
               :key="index"
               class="text-white font-light cursor-pointer"
-              v-motion
-              :initial="{ opacity: 0, y: -16 }"
-              :enter="{ opacity: 1, y: 0, transition: { duration: 400, delay: 100 + index * 80 } }"
             >
-              <a :href="item.link">{{ item.name }}</a>
+              <a :href="item.link" class="text-white">{{ item.name }}</a>
             </li>
           </ul>
         </menu>
 
         <button
-          class="lg:hidden text-white absolute right-6"
+          class="lg:hidden text-white absolute right-6 cursor-pointer"
           @click="mobileMenuOpen = !mobileMenuOpen"
         >
           <Icon
@@ -166,7 +189,10 @@ const socials = [
             friend's needs. Join us to ensure your pet receives the best care
             and attention they deserve.
           </p>
-          <button class="border border-white text-white py-2 px-5 hover:bg-white hover:text-black lg:bg-[#FFF200] lg:text-black lg:border-0 lg:hover:bg-yellow-300 lg:hover:text-black transition-colors duration-300">
+          <button
+            class="border border-white text-white py-2 px-5 hover:bg-white hover:text-black lg:bg-[#FFF200] lg:text-black lg:border-0 lg:hover:bg-yellow-300 lg:hover:text-black transition-colors duration-300 cursor-pointer"
+            @click="scrollToWaitlist"
+          >
             Join The Waitlist
           </button>
         </div>
@@ -286,18 +312,33 @@ const socials = [
             Be the first to know about our launch and exclusive offers for pet
             lovers!
           </p>
+          <input
+            id="waitlist-input"
+            v-model="waitlistEmail"
+            type="email"
+            placeholder="Enter your email"
+            class="w-full bg-transparent border border-white/40 text-white placeholder-white/40 px-4 py-3 outline-none focus:border-white transition-colors"
+          />
           <div class="flex gap-4">
             <button
-              class="border border-white bg-white text-black py-3 px-6 hover:bg-[#FFF200] hover:border-[#FFF200] transition-colors duration-300"
+              @click="submitWaitlist"
+              :disabled="waitlistLoading"
+              class="border border-white bg-white text-black py-3 px-6 hover:bg-[#FFF200] hover:border-[#FFF200] transition-colors duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign Up
+              {{ waitlistLoading ? 'Sending...' : 'Sign Up' }}
             </button>
             <button
-              class="border border-white text-white py-3 px-6 hover:bg-white hover:text-black transition-colors duration-300"
+              class="border border-white text-white py-3 px-6 hover:bg-white hover:text-black transition-colors duration-300 cursor-pointer"
             >
               Learn More
             </button>
           </div>
+          <p v-if="waitlistStatus === 'success'" class="text-[#FFF200] text-sm">
+            You're on the list! Check your inbox for a confirmation.
+          </p>
+          <p v-if="waitlistStatus === 'error'" class="text-red-400 text-sm">
+            Something went wrong. Please try again.
+          </p>
         </div>
 
         <div
@@ -374,7 +415,7 @@ const socials = [
         <h2 class="text-4xl font-bold text-white mb-2">Still have questions?</h2>
         <p class="text-white font-light mb-8">We're here to help!</p>
         <button
-          class="border border-white text-white py-3 px-6 rounded-md hover:bg-white hover:text-black transition-colors duration-300"
+          class="border border-white text-white py-3 px-6 rounded-md hover:bg-white hover:text-black transition-colors duration-300 cursor-pointer"
         >
           Contact
         </button>
@@ -402,7 +443,7 @@ const socials = [
               placeholder="Your Email Here"
               class="w-full bg-transparent border border-white text-white placeholder-white/40 text-sm px-3 py-3 outline-none focus:border-[#FFF200]"
             />
-            <button class="w-full lg:w-auto text-white border-white border text-sm px-4 py-3 font-medium hover:bg-white hover:text-black transition-colors duration-300">
+            <button class="w-full lg:w-auto text-white border-white border text-sm px-4 py-3 font-medium hover:bg-white hover:text-black transition-colors duration-300 cursor-pointer">
               Join
             </button>
           </div>
