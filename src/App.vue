@@ -177,7 +177,7 @@ const submitWaitlist = async () => {
   }
 };
 
-const mobileMenuOpen = ref(false);
+
 
 const scrollToWaitlist = () => {
   document.getElementById('waitlist-input')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
