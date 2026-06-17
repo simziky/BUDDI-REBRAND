@@ -3,17 +3,17 @@ import { ref } from "vue";
 import logo from "../src/assets/png/logo.png";
 import hero from "../src/assets/svg/hero.svg?url";
 import petDog from "../src/assets/png/pet-dog.png";
+import img1 from "../src/assets/png/img1.png";
+import img2 from "../src/assets/png/img2.png";
+import img3 from "../src/assets/png/img3.png";
+import img4 from "../src/assets/png/img4.png";
+import img5 from "../src/assets/png/img5.png";
 import { Icon } from "@iconify/vue";
 import PersonStar from "./assets/icon/personStar.svg?component";
 import MegaPhone from "./assets/icon/megaphone.svg?component";
 import CircularGroup from "./assets/icon/circular-group.svg?component";
+import DogSpotBackground from './DogSpotBackground.vue'
 
-const menuItems = [
-  { name: "Home", link: "/" },
-  { name: "Products", link: "/products" },
-  { name: "Services", link: "/services" },
-  { name: "About Us", link: "/about" },
-];
 
 const services = [
   {
@@ -32,6 +32,72 @@ const services = [
     description: "Travel with confidence knowing your pet is in good hands.",
   },
 ];
+
+const buyersSection = [
+  {
+   
+    title: "Training",
+    description: "Teach and get your pet to understand every word",
+    img: img1,
+  },
+  {
+    title: "Guard Dog",
+    description: "Get any dog for your security and safety anytime, anywhere.",
+    img: img2,
+  },
+  {
+    title: "Grooming",
+    description: "Make your pet look like a model with a proper care.",
+    img: img3,
+  },
+  {
+    title: "Daycare",
+    description: " Get comfort anywhere knowing your friend is well cared for.",
+    img: img4,
+  },
+  {
+    title: "Vet Clinic",
+    description: " Get a virtual assistant also know the closest clinic near you.",
+    img: img5,
+  },
+]
+
+
+const sellersSection = [
+  {
+   icon: "solar:wallet-linear",
+    title: "Pre-Funded Wallets",
+    description: "Know clients are serious before committing. Payment are confirmed before you ship or schedule services or hand-over.",
+  },
+  {
+    icon: "cil:badge",
+    title: "Reputable Platform Badges",
+    description: "Accumulate verified historical feedback rankings, background checks, and license verification badges to stand apart from amateur breeders.",
+  },
+  {
+    icon: "lineicons:dashboard-square-1",
+    title: "Inventory & Analytics Dashboard",
+    description: "rack real-time stock levels, monitor active listings, and analyze sales performance stats to capture deeper insights.",
+  },
+]
+
+const vetSection = [
+  {
+   icon: "famicons:create-outline",
+    title: "Create Registered Clinic Accounts",
+    description: "Build a fully customized medical team profile showcasing licensing credentials, consultation rates, and operational details.",
+  },
+  {
+    icon: "lucide:calendar",
+    title: "Schedule",
+    description: "Unlock scheduling streams for non-emergency ear checks, allergies, and puppy deworming guidance safely inside the browser.",
+  },
+  {
+    icon: "mdi:drugs",
+    title: "Certified Digital Prescriptions & Notes",
+    description: "Instantly write post-call therapy instructions or drug formulas, and transmit official digital copies directly to the buyer's account.",
+  },
+]
 
 const sellerFeatures = [
   {
@@ -73,6 +139,16 @@ const faqs = [
     a: "If you still have questions, our support team is here to assist you. Don't hesitate to reach out for any inquiries.",
   },
 ];
+
+
+
+const activeTab = ref('buyers')
+
+const tabs = [
+  { key: 'buyers', label: 'Buyers' },
+  { key: 'sellers', label: 'Sellers' },
+  { key: 'vetClinic', label: 'Vet clinic' },
+]
 
 const activeIndex = ref<number | null>(null);
 const toggleFaq = (i: number) => {
@@ -117,8 +193,9 @@ const socials = [
 
 <template>
   <main class="bg-black">
+     <DogSpotBackground />
     <!-- PAGE HEADER -->
-    <header class="bg-black w-full sticky top-0 z-40">
+    <header class="bg-black w-full sticky top-0 z-40 ">
       <div class="h-[70px] flex justify-center relative px-6 lg:px-20 items-center">
         <div
           class="absolute left-6 lg:left-20"
@@ -129,40 +206,10 @@ const socials = [
           <img :src="logo" />
         </div>
 
-        <menu class="hidden lg:block">
-          <ul class="flex items-center gap-8">
-            <li
-              v-for="(item, index) in menuItems"
-              :key="index"
-              class="text-white font-light cursor-pointer"
-            >
-              <a :href="item.link" class="text-white">{{ item.name }}</a>
-            </li>
-          </ul>
-        </menu>
-
-        <button
-          class="lg:hidden text-white absolute right-6 cursor-pointer"
-          @click="mobileMenuOpen = !mobileMenuOpen"
-        >
-          <Icon
-            :icon="mobileMenuOpen ? 'mdi:close' : 'mdi:menu'"
-            height="28"
-            width="28"
-          />
-        </button>
+        
       </div>
 
-      <div v-if="mobileMenuOpen" class="lg:hidden absolute top-[70px] left-0 right-0 z-50 bg-black px-6 pb-6 flex flex-col gap-4 border-t border-white/10">
-        <a
-          v-for="item in menuItems"
-          :key="item.name"
-          :href="item.link"
-          class="text-white font-light py-2"
-        >
-          {{ item.name }}
-        </a>
-      </div>
+      
     </header>
 
     <!-- HERO SECTION -->
@@ -253,6 +300,120 @@ const socials = [
         </div>
       </div>
     </section>
+
+     
+     <!-- CUSTOMERS SECTION -->
+<section class="mt-28 px-6 lg:px-20">
+
+  <!-- TAB BUTTONS -->
+  <div>
+    <div class="border-2 border-[#FFF200] p-3 rounded-[55px] w-[486px] mx-auto flex justify-between">
+      <button
+        v-for="tab in tabs"
+        :key="tab.key"
+        @click="activeTab = tab.key"
+        class="py-3 px-10 rounded-3xl transition-colors duration-200 cursor-pointer"
+        :class="activeTab === tab.key
+          ? 'bg-[#FFF200] text-black'
+          : 'bg-transparent text-white'"
+      >
+        {{ tab.label }}
+      </button>
+    </div>
+  </div>
+
+  <!-- BUYERS SECTION -->
+  <div v-if="activeTab === 'buyers'" class="mt-16 lg:mt-20">
+    <div>
+      <h3 class="text-3xl lg:text-4xl font-bold text-white leading-tight lg:leading-[40px] max-w-2xl">
+        Buying Pets & Supplies with Unconditional Peace of Mind
+      </h3>
+      <p class="text-white font-light mt-5">
+        For standard buyers, our marketplace is an end-to-end haven.
+        Bypassing unverified online boards means you are always
+        interacting with verified sellers checked for fraud patterns.
+      </p>
+    </div>
+    <div class="w-full grid grid-cols-1 lg:grid-cols-5 gap-3 mt-16 lg:mt-20">
+      <div
+        class=" overflow-clip relative  h-[400px] border-2 border-[#FFF200] rounded-xl flex flex-col justify-end "
+        v-for="(item, index) in buyersSection"
+        :key="index"
+        v-motion
+        :initial="{ opacity: 0, y: 40 }"
+        :visible-once="{ opacity: 1, y: 0, transition: { duration: 500, delay: index * 150 } }"
+      >
+    
+        <img :src="item.img" class=" w-full h-full absolute object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"></div>
+        <div class="p-[2rem] space-y-3 absolute z-10">
+        <h4 class="font-bold text-2xl text-white">{{ item.title }}</h4>
+        <p class="text-white font-light text-xs">{{ item.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELLERS SECTION -->
+  <div v-else-if="activeTab === 'sellers'" class="mt-16 lg:mt-20">
+    <div>
+      <h3 class="text-3xl lg:text-4xl font-bold text-white leading-tight lg:leading-[40px] max-w-2xl">
+        Post Listings & Start Selling Your Products or Pets
+      </h3>
+      <p class="text-white font-light mt-5">
+        Whether you are an authorized premium breeder or a trusted supplier of pet accessories and organic feed,
+        Pet gives you the tools to list your goods or pets and receive secure, pre-funded escrow payments without worry.
+      </p>
+    </div>
+    <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-3 mt-16 lg:mt-20">
+      <div
+        class="space-y-3 h-[400px] border-2  border-[#FFF200] rounded-xl flex flex-col justify-end p-[2rem]"
+        v-for="(item, index) in sellersSection"
+        :key="index"
+        v-motion
+        :initial="{ opacity: 0, y: 40 }"
+        :visible-once="{ opacity: 1, y: 0, transition: { duration: 500, delay: index * 150 } }"
+      >
+      <div class="absolute top-10">
+            <Icon :icon="item.icon" color="#FFF200" height="48" width="48" />
+          </div>
+        <h4 class="font-bold text-2xl text-white">{{ item.title }}</h4>
+        <p class="text-white font-light text-xs">{{ item.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- VET CLINIC SECTION -->
+  <div v-else-if="activeTab === 'vetClinic'" class="mt-16 lg:mt-20">
+    <div>
+      <h3 class="text-3xl lg:text-4xl font-bold text-white leading-tight lg:leading-[40px] max-w-2xl">
+        Create Your Clinic Account & Expand Remote Consultations
+      </h3>
+      <p class="text-white font-light mt-5">
+        Establish an authorized clinical account so pet parents can find,
+        triage, and schedule video appointments with your licensed doctors
+        under official verification credentials.
+      </p>
+    </div>
+    <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-3 mt-16 lg:mt-20">
+      <div
+        class="space-y-3 h-[400px] border-2 border-[#FFF200] rounded-xl flex flex-col justify-end p-[2rem]"
+        v-for="(item, index) in vetSection"
+        :key="index"
+        v-motion
+        :initial="{ opacity: 0, y: 40 }"
+        :visible-once="{ opacity: 1, y: 0, transition: { duration: 500, delay: index * 150 } }"
+      >
+       <div class="absolute top-10">
+            <Icon :icon="item.icon" color="#FFF200" height="48" width="48" />
+          </div>
+        <h4 class="font-bold text-2xl text-white">{{ item.title }}</h4>
+        <p class="text-white font-light text-xs">{{ item.description }}</p>
+      </div>
+    </div>
+  </div>
+
+</section>
 
     <!-- EMPOWER / SELLING POTENTIAL SECTION -->
     <section class="mt-28 px-6 lg:px-20 text-center">
@@ -518,3 +679,5 @@ const socials = [
   opacity: 0;
 }
 </style>
+
+
