@@ -192,7 +192,7 @@ const socials = [
 </script>
 
 <template>
-  <main class="bg-black">
+  <main class="bg-black overflow-hidden">
      <DogSpotBackground />
     <!-- PAGE HEADER -->
     <header class="bg-black w-full sticky top-0 z-40 ">
@@ -307,12 +307,12 @@ const socials = [
 
   <!-- TAB BUTTONS -->
   <div>
-    <div class="border-2 border-[#FFF200] p-3 rounded-[55px] w-[486px] mx-auto flex justify-between">
+    <div class="border-2 border-[#FFF200] p-3 rounded-[55px] max-w-[486px] mx-auto flex justify-between">
       <button
         v-for="tab in tabs"
         :key="tab.key"
         @click="activeTab = tab.key"
-        class="py-3 px-10 rounded-3xl transition-colors duration-200 cursor-pointer"
+        class=" py-2 md:py-3 px-5 md:px-10 rounded-3xl transition-colors duration-200 cursor-pointer"
         :class="activeTab === tab.key
           ? 'bg-[#FFF200] text-black'
           : 'bg-transparent text-white'"
